@@ -1,0 +1,20 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// banco de dados
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL_DADOS")
+}
+
+model Fototext {
+  id   Int    @id @default(autoincrement())
+  name          String
+  criadoEm DateTime @default(now())
+  ediadto DateTime @updatedAt
+  data    Bytes @db.LongBlob()
+  url     String?
+}
+
