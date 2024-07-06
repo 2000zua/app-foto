@@ -23,16 +23,27 @@ export class TesteController {
     }),
   )
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const { filename, path, buffer } = file;
+    const { filename, path} = file;
     console.log(file);
-    //const image = await this.testeService.createImage(filename, path, buffer);
-    //return { message: 'Imagem salva com sucesso no MySQL!', imageUrl: `http://localhost:3000/images/${file.filename}`, image };
+    const image = await this.testeService.create(filename, path);
+    return { message: 'Imagem salva com sucesso no MySQL!', imageUrl: `http://192.168.0.201:3001/images/${file.filename}`, image };
   }
 
-  @Get(':filename')
-  async getImage(@Param('filename') filename: string, @Res() res: Response) {
-    const filePath = join(process.cwd(), 'uploads', filename);
-    return res.sendFile(filePath);
+  @Get('all')
+  async getImage( @Res() res: Response) {
+    return await this.testeService.findAll();
+    //const filePath = join(process.cwd(), 'uploads/', imgs[0].data);
+    //return res.sendFile(imgs[0].data);
   }
+
+  @Post('up')
+  @UseInterceptors(FileInterceptor('image'))
+  async upload(@UploadedFile() file: Express.Multer.File): Promise<any>{
+    console.log(file);
+    const {originalname, buffer} = file;
+    return await this.testeService.createImage(originalname, buffer);
+    //return {mensagem: 'Imagemm salvado com sucesso', image}
+  }
+
 
 }

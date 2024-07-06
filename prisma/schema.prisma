@@ -15,6 +15,12 @@ model Fototext {
   criadoEm DateTime @default(now())
   ediadto DateTime @updatedAt
   data    Bytes @db.LongBlob()
-  url     String?
+}
+
+model Image {
+  id   Int    @id @default(autoincrement())
+  nome String
+  path String
+  criadoem DateTime @default(now())
 }
 
